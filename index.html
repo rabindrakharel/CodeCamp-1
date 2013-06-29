@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+<title>VDC/Municipality Level Cluster and Choropleth Map</title>
+<link rel="stylesheet" type="text/css" href="css/nepaviz.css" />
+<link rel="stylesheet" type="text/css" href="css/colorbrewer.css" />
+<script src="js/d3.v3.min.js"></script>
+<script src="js/topojson.v1.min.js"></script>
+<script src="js/nepaviz.js"></script>
+</head>
+<body>
+<div id="menu">
+	map-type:
+	<select id="type">
+        <option value="" style="display:none;"></option>
+        <option value="cluster">cluster</option>
+        <option value="choropleth">choropleth</option>
+    </select>
+	color-scale:
+	<select id="colorScale">
+            <option value="" style="display:none;"></option>
+            <option value="YlGn">YlGn</option>
+            <option value="YlGnBu">YlGnBu</option>
+            <option value="GnBu">GnBu</option>
+            <option value="BuGn">BuGn</option>
+            <option value="PuBuGn">PuBuGn</option>
+            <option value="PuBu">PuBu</option>
+            <option value="BuPu">BuPu</option>
+            <option value="RdPu">RdPu</option>
+            <option value="PuRd">PuRd</option>
+            <option value="OrRd">OrRd</option>
+            <option value="YlOrRd">YlOrRd</option>
+            <option value="YlOrBr">YlOrBr</option>
+            <option value="Purples">Purples</option>
+            <option value="Blues">Blues</option>
+            <option value="Greens">Greens</option>
+            <option value="Oranges">Oranges</option>
+            <option value="Reds">Reds</option>
+            <option value="Greys">Greys</option>
+        </select>
+		field:
+		<select id="field">
+            <option value="" style="display:none;"></option>
+            <option value="total_households">total_households</option>
+            <option value="water_tap_%">water_tap_%</option>
+            <option value="water_well_%">water_well_%</option>
+            <option value="water_tubewell_%">water_tubewell_%</option>
+            <option value="water_spout_%">water_spout_%</option>
+            <option value="water_river_%">water_river_%</option>
+            <option value="cooking_wood_%">cooking_wood_%</option>
+            <option value="cooking_kerosene_%">cooking_kerosene_%</option>
+            <option value="cooking_lpgas_%">cooking_lpgas_%</option>
+            <option value="cooking_biogas_%">cooking_biogas_%</option>
+            <option value="light_electricity_%">light_electricity_%</option>
+            <option value="light_kerosene_%">light_kerosene_%</option>
+            <option value="light_biogas_%">light_biogas_%</option>
+            <option value="toilet_flush_%">toilet_flush_%</option>
+            <option value="toilet_ordinary_%">toilet_ordinary_%</option>
+            <option value="toilet_none_%">toilet_none_%</option>
+            <option value="radio_%">radio_%</option>
+            <option value="tv_%">tv_%</option>
+            <option value="phone_%">phone_%</option>
+            <option value="transportation_%">transportation_%</option>
+        </select>
+</div>
+<div id="description">
+<h2>Cluster Description</h2>
+<p>The cluster map shows that Cluster 1 has highest socio-economic status, cluster 3 has the lowest status whereas as the cluster 2 falls in the middle.</p>
+
+<p>The table below shows the percentage of household having the following assets for each clusters:</p>
+	<table border=1>
+		<tr>
+			<td width=100></td>
+			<td width=100>Cluster 1</td>
+			<td width=100>Cluster 2</td>
+			<td width=100>Cluster 3</td>
+		</tr>
+		<tr>
+			<td width=100>Water Source:Tap(%)</td>
+			<td width=100>49.58</td>
+			<td width=100>68.19</td>
+			<td width=100>15.65</td>
+		</tr>
+		<tr>
+			<td width=100>Water Source:Well(%)</td>
+			<td width=100>7.79</td>
+			<td width=100>12.95</td>
+			<td width=100>3.58</td>
+		</tr>
+		<tr>
+			<td width=100>Water Source:Tubewell(%)</td>
+			<td width=100>37.53</td>
+			<td width=100>0.71</td>
+			<td width=100>76.21</td>
+		</tr>
+		<tr>
+			<td width=100>Water Source:Spout(%)</td>
+			<td width=100>2.42</td>
+			<td width=100>13.53</td>
+			<td width=100>0.47</td>
+		</tr>
+		<tr>
+			<td width=100>Water Source:River(%)</td>
+			<td width=100>0.58</td>
+			<td width=100>3.41</td>
+			<td width=100>1.38</td>
+		</tr>
+		<tr>
+			<td width=100>Cooking Source:Wood(%)</td>
+			<td width=100>7.79</td>
+			<td width=100>12.95</td>
+			<td width=100>3.58</td>
+		</tr>
+		<tr>
+			<td width=100>Cooking Source:kerosene(%)</td>
+			<td width=100>23.1</td>
+			<td width=100>4.68</td>
+			<td width=100>3.53</td>
+		</tr>
+		<tr>
+			<td width=100>Cooking Source:LP Gas(%)</td>
+			<td width=100>14.37</td>
+			<td width=100>1.27</td>
+			<td width=100>0.96</td>
+		</tr>
+		<tr>
+			<td width=100>Cooking Source:Bio-Gas(%)</td>
+			<td width=100>2.64</td>
+			<td width=100>1.15</td>
+			<td width=100>0.72</td>
+		</tr>
+		<tr>
+			<td width=100>Toilet Facility:Flush (%)</td>
+			<td width=100>38.96</td>
+			<td width=100>9.8</td>
+			<td width=100>4.05</td>
+		</tr>
+		<tr>
+			<td width=100>Toilet Facility:Ordinary(%)</td>
+			<td width=100>21.77</td>
+			<td width=100>29.12</td>
+			<td width=100>5.77</td>
+		</tr>
+		<tr>
+			<td width=100>Toilet Facility:None(%)</td>
+			<td width=100>37.85</td>
+			<td width=100>5.86</td>
+			<td width=100>88.61</td>
+		</tr>
+		<tr>
+			<td width=100>Lighting Fuel:Electricity(%)</td>
+			<td width=100>66.63</td>
+			<td width=100>21.54</td>
+			<td width=100>19.20</td>
+		</tr>
+		<tr>
+			<td width=100>Lighting Fuel:Kerosene(%)</td>
+			<td width=100>31.86</td>
+			<td width=100>69.16</td>
+			<td width=100>79.23</td>
+		</tr>
+		<tr>
+			<td width=100>Lighting Fuel:Biogas(%)</td>
+			<td width=100>0.18</td>
+			<td width=100>0.22</td>
+			<td width=100>0.26</td>
+		</tr>
+		<tr>
+			<td width=100>House with Radio(%)</td>
+			<td width=100>54.91</td>
+			<td width=100>56.52</td>
+			<td width=100>34.29</td>
+		</tr>
+		<tr>
+			<td width=100>House with TV(%)</td>
+			<td width=100>41.29</td>
+			<td width=100>5.64</td>
+			<td width=100>11.58</td>
+		</tr>
+		<tr>
+			<td width=100>House with Phone(%)</td>
+			<td width=100>10.51</td>
+			<td width=100>0.94</td>
+			<td width=100>0.77</td>
+		</tr>
+		<tr>
+			<td width=100>House with means of Transportation(%)</td>
+			<td width=100>45.40</td>
+			<td width=100>2.31</td>
+			<td width=100>57.56</td>
+		</tr>
+	</table>
+	<p>Household Percentage of each clusters with the following assets:</p>
+	<table>
+	<tr><td><img src="img/water.jpg" /></td><td><img src="img/toilet.jpg" /></td></tr>
+	<tr><td><span>Water Sources</span></td><td><span>Types of Toilet</span></td></tr>
+	<tr><td><img src="img/radio.jpg" /></td><td><img src="img/cooking.jpg" /></td></tr>
+	<tr><td><span>Electronics and Transportation</span></td><td><span>Cooking Facilities</span></td></tr>
+	<tr><td><img src="img/light.jpg" /></td><td></td></tr>
+	<tr><td><span>Lightning Facilities</span></td><td></td></tr>
+	</table>
+</div>
+<script>
+	nepaviz.init(960, 600, "body", "json/nepal.json");
+	d3.select("#colorScale").attr('disabled', "");
+	d3.select("#field").attr('disabled', "");
+	d3.select("#description").style('display', "none");
+	
+	d3.select("#type").on("change", function() {
+		if(this.value == 'cluster') {
+			d3.selectAll("g").remove();
+			d3.select("#description").style('display', "block");
+			d3.select("#colorScale").attr('disabled', "");
+			d3.select("#field").attr('disabled', "");
+			nepaviz.setTitle("VDC/Municipality Level Cluster of Household Assest Index");
+			nepaviz.cluster("vdc", "json/vdc_cluster.json", "json/household_data_vdc.json");
+		} else if(this.value == 'choropleth') {
+			d3.select("#description").style('display', "none");
+			d3.select("#colorScale").attr('disabled', null);
+			d3.select("#field").attr('disabled', null);
+			d3.selectAll("g").remove();
+			nepaviz.data("json/household1.json");
+			nepaviz.setTitle("VDC Level Household Data of 2001");
+			nepaviz.choroplethLevel("vdc", "toilet_none_%", 5);
+		}
+	});
+	
+	d3.select("#colorScale").on("change", function() {
+		d3.selectAll("svg").attr("class", this.value);
+	});
+	
+	d3.select("#field").on("change", function() {
+		d3.selectAll("g").remove();
+		nepaviz.data("json/household1.json");
+		nepaviz.setTitle("VDC Level Household Data of 2001");
+		nepaviz.choroplethLevel("vdc", this.value, 5);
+	});
+</script>
+</body>
+</html>
